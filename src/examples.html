@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+
+<head profile="http://www.w3.org/2005/10/profile">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link href="examples.css" media="all" rel="stylesheet" type="text/css">
+	<script src="../lib/jquery-1.7.2.min.js" type="text/javascript"></script>
+	<script src="../lib/jquery-impromptu.4.0.js" type="text/javascript"></script>
+	<script src="jquery-impromptu-ext.js" type="text/javascript"></script>
+	
+</head>
+<body>
+
+<pre>
+jQuery Impromptu Extension
+By: John Dobiatowski [<a href='http://dobiatowski.blogspot.com'>http://dobiatowski.blogspot.com</a>]
+Version 0.9.3 for jQuery Impromptu 3.1+
+Last Modified: 2/4/2011
+
+extension download at: <a href='http://dobiatowski.blogspot.com/p/impromptu-extension.html'>http://dobiatowski.blogspot.com/p/impromptu-extension.html</a>
+jQuery Impromptu download at: <a href='http://trentrichardson.com/Impromptu/index.php'>http://trentrichardson.com/Impromptu/index.php</a>
+
+Copyright 2010 John Dobiatowski
+Attribution-ShareAlike 3.0 Unported
+http://creativecommons.org/licenses/by-sa/3.0/
+
+Improvements:
+[feature] submiting forms on enter event inside prompt it support several forms in prompt, they are detected by form name for example: login form and register form opened in one prompt
+[fix] performance problem in zoom mode fixed when zoom in IE8 is set, all animations of prompt slow down dramaticly and event stuck (tested on 2,8GHz CPU, 2GB RAM, WinXP) patch detect zoom and turn off animations
+[fix] prompt reopen problem - if there is already prompt with the same ID, it close it and open new one it prevents situations when you could open serveral the same prompts, one overlapping other
+</pre>
+
+	<h1>How to use extension</h1>
+	<p>This is extension of jQuery Impromptu, so you need this files to work:</p>
+	<ul>
+		<li>jQuery Impromptu Version 3.1+</li>
+		<li>jQuery Impromptu Extension Version 0.9.3 for jQuery Impromptu 3.1+</li>
+		<li>jQuery 1.4.2+</li>
+	</ul>
+	<p>I spend some more time to make this extension as much independent as possible, so it should be compatible with every next release of jQuery Impromptu Version 3.</p>
+	<p><b>If you want to use this plug-in, you simply replace $.prompt to $.promptExt and that's it.</b></p>
+	<p>For syntax, go check source code of this file.</p>
+
+	
+	
+	
+	<h1>Example 1</h1>
+
+	<p>Two forms inside one prompt. When you hit enter on any of inputs its submit and send info to callback function with information which form was submited.</p>
+
+	<script type='text/javascript'>
+		var txt1 = 'Hit enter on any input:<br />'
+		+'1st form: <form name="form1"> <input type="text" name="input1" value="1st form input"/> </form>'
+		+'2nd form: <form name="form2"> <input type="text" name="input2" value="2nd form input"/> </form>';
+
+		function callbackExample1(v,m,f){
+			if(v == 'form1')
+				$.promptExt(f.input1);
+			else if(v == 'form2')
+				$.promptExt(f.input2);
+		}
+	</script>
+
+	<button onclick="$.promptExt(txt1,{ submit: callbackExample1, buttons: { 'Submit 1st':'form1', 'Submit 2nd':'form2' } })">Open Example 1: Two forms</button>
+
+	
+	
+	
+	<h1>Example 2</h1>
+
+	<p>Use all kinds of form inputs.</p>
+
+	<script type='text/javascript'>
+		var txt2 = 'Hit enter on any input:<br />'
+		+'<form name="form1">'
+		+'<p><input type="text" name="text" value="text type"/></p>'
+		+'<p><select name="select"><option value="select1">select 1</option><option value="select2">select 2</option></select></p>'
+		+'<p><input type="checkbox" name="checkbox" checked="checked" value="checkbox type"/> checkbox type</p>'
+		+'</form>';
+
+		function callbackExample2(v,m,f){
+			if(v == 'form1') {
+				var content = 'Input: ' + f.text + '<br/>' 
+					+ 'Select: ' + f.select + '<br/>' 
+					+ 'Checkbox: ' + f.checkbox + '<br/>';
+				$.promptExt(content);
+			}
+		}
+	</script>
+
+	<button onclick="$.promptExt(txt2,{ submit: callbackExample2, buttons: { 'Submit':'form1', 'Cancel':false } })">Open Example 2: Different input types</button>
+
+
+
+	<h1>Example 3</h1>
+
+	<p>Open multiple prompts and re-open the same prompt. If ID (prefix) of prompt is the same opened prompt is closed and after that opens new one. Note that prefix is used for CSS class names so if you change prefix you need create new CSS classes for it.</p>
+
+	<script type='text/javascript'>
+		function openFiveSame() {
+			$.promptExt('one');
+			$.promptExt('one');
+			$.promptExt('one');
+			$.promptExt('one');
+			$.promptExt('one');
+		}
+	</script>
+
+	<button onclick="openFiveSame()">Open Example 3: Five the same prompts</button>
+
+	
+	<h1>Example 4</h1>
+
+	<p>Try to set zoom in Internet Explorer 8. And open example 1 or 2. If IE8 is in zoom mode, prompt opens without animations.</p>
+</body>
+</html>
